@@ -3,12 +3,10 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const authMiddleware = require("../middleware/auth");
 
-
-
-
 router.post("/login", (req, res) => {
-  const { name, phone } = req.body;
-  const token = userController.login(name, phone);
+  const { phone, password } = req.body;
+  console.log (req.body);
+  const token = userController.login(phone, password);
 
   if (!token) {
     return res.status(401).json({ message: "Invalid credentials" });
@@ -18,7 +16,7 @@ router.post("/login", (req, res) => {
 });
 
 router.get('/me', authMiddleware, (req, res) => {
-  const user = userController.getCurrentUser(req.user.name);
+  const user = userController.getCurrentUser(req.user.id);
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }

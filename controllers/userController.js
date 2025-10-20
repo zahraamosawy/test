@@ -2,9 +2,9 @@
 const users = require("../db/users.json");
 var jwt = require("jsonwebtoken");
 
-const login = (name, phone) => {
+const login = (phone, password) => {
   let user = users.find(
-    (el) => el.name === name && el.phone === phone
+    (el) => el.phone === phone && el.password === password
   );
 
   if (!user) {
@@ -12,13 +12,13 @@ const login = (name, phone) => {
   }
 
   var token = jwt.sign({ id: user.id, name: user.name, phone: user.phone }, process.env.SECRET_KEY, {
-    expiresIn: "1h",
+    expiresIn: "5h",
   });
 
   return token;
 };
-const getCurrentUser = (name) => {
-  const user = users.find((el) => el.name === name);
+const getCurrentUser = (id) => {
+  const user = users.find((el) => el.id === id);
   if (!user) {
     return null;
   } else {
